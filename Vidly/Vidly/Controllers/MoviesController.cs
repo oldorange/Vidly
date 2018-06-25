@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity.Validation;
 using Vidly.Models;
 using Vidly.ViewModels;
 
@@ -55,11 +56,21 @@ namespace Vidly.Controllers
         }
 
 
-[HttpPost]
+        [HttpPost]
         public ActionResult Save(Movie movie)
         {
             if (movie.Id == 0)
+            {
                 _context.Movies.Add(movie);
+                try
+                {
+                    _context.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    Console.WriteLine("Save Movie Error" + e);
+                }
+            }
             else
             {
                 var movieInDb = _context.Movies
@@ -77,6 +88,7 @@ namespace Vidly.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index", "Movies");
         }
+
 
         public ActionResult Edit(int id)
         {
