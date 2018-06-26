@@ -51,7 +51,7 @@ else
                         url: "/api/customers/" + $(this).attr("data-customer-id"),
                         method: "DELETE",
                         success: function () {
-                            console.log("Success")
+                            $(this).parents("tr").remove();
                         }
                     });
                 }

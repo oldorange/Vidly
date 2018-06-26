@@ -47,6 +47,7 @@ namespace Vidly.Controllers
                 .ToList();
             var viewModel = new CustomerFormViewModel
             {
+                Customer = new Customer(),
                 MembershipTypes = membershipTypes
             };
             return View("CustomerForm", viewModel);
@@ -64,10 +65,23 @@ namespace Vidly.Controllers
                 };
                 return View("CustomerForm", viewModel);
             }
-            if (customer.Id ==0)
+            if (customer.Id == 0)
+            {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = new Customer(),
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
                 _context.Customers.Add(customer);
+            }
+               
             else
             {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
                 var customerInDb = _context.Customers
                     .Single(c => c.Id == customer.Id);
                 // Mapper.Map(customer, customerInDb);
